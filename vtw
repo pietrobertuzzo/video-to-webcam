@@ -1,0 +1,21 @@
+#!/bin/bash
+
+usage() { echo "Usage: $0 [<filename.mp4>] [/dev/videoX]" 1>&2; exit 1; }
+
+while getopts ":h" option; do
+	case $option in
+		h)
+			usage
+			exit;;
+	esac
+done
+if [ -f "$1" ]; then
+	if [ -f "$2" ]; then
+		ffmpeg -stream_loop -1 -re -i $1 -map 0:v -f v4l2 $2
+
+	else
+		echo "Error: output $2 not found. Try modprobe v4l2."
+	fi
+else
+	echo "Error: file $1 not found."
+fi
