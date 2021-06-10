@@ -9,6 +9,20 @@ while getopts ":h" option; do
 			exit;;
 	esac
 done
+if command -v v2l4loopback >/dev/null 2>&1 ; then
+    echo "v2l4loopback found"
+else
+    echo "v2l4loopback not found"
+    exit
+fi
+if command -v ffmpeg >/dev/null 2>&1 ; then
+    echo "ffmpeg found"   
+else
+    echo "ffmpeg not found"
+    exit
+fi
+
+
 if [ -f "$1" ]; then
 	if [ -f "$2" ]; then
 		ffmpeg -stream_loop -1 -re -i $1 -map 0:v -f v4l2 $2
